@@ -33,6 +33,9 @@ inline bool val_is_raw_object(value inVal) { return val_type(inVal)==valtObject;
 inline bool val_is_enum(value inVal) { return val_type(inVal)==valtEnum; }
 inline bool val_is_class(value inVal) { return val_type(inVal)==valtClass; }
 
+//vars
+NOTIFYICONDATA m_NID;
+
 // Allocating:
 // alloc_null() == generate haxe null / or use val_null
 // alloc_bool(bool) == generate haxe bool
@@ -116,10 +119,8 @@ value result = val_callN(root->get(), args, num_args);
 // FYI: if the type is bool or int or double (haxe float) then it does the conversion automatically
 
 #if defined(HX_WINDOWS)
-static value notification_send_toast (value title, value desc, value taskIconPath) {
+static value notification_send (value title, value desc, value taskIconPath) {
 	HWND hWnd = GetActiveWindow();
-
-	NOTIFYICONDATA m_NID;
 
     m_NID.cbSize = sizeof(m_NID);
     m_NID.hWnd = hWnd;
@@ -149,18 +150,27 @@ static value notification_send_toast (value title, value desc, value taskIconPat
  
     return alloc_int(Shell_NotifyIcon(NIM_MODIFY, &m_NID));
 }
-DEFINE_PRIME3 (notification_send_toast);
+DEFINE_PRIME3 (notification_send);
 
 //literally just modified code from VS Dave and Bambi that adds icons and ofcourse making it work as an NDLL
 //https://github.com/BemboLikePizza/VsDave/blob/main/source/PlatformUtil.hx
 //(I am linking a fork of the mod's repo due to the actual mod repo being down)
 
+static value notification_delete () {
+    return alloc_int(Shell_NotifyIcon(NIM_DELETE, &m_NID));
+}
+DEFINE_PRIME0 (notification_delete);
 
 #else
-static value notification_send_toast (value title, value desc, value taskIconPath) {
+static value notification_send (value title, value desc, value taskIconPath) {
 	return val_int(0);
 }
-DEFINE_PRIME3 (notification_send_toast);
+DEFINE_PRIME3 (notification_send);
+
+static value notification_delete () {
+	return val_int(0);
+}
+DEFINE_PRIME0 (notification_delete);
 
 #endif
 
