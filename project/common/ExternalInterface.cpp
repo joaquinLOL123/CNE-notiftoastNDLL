@@ -18,15 +18,17 @@
 #pragma comment(lib, "Dwmapi")
 #pragma comment(lib, "Shell32.lib")
 using namespace std;
+
+#elif defined(HX_MACOS)
+#import <Foundation/Foundation.h>
+#include "macUtils.h"
+using namespace macUtils;
+
 #endif
 
 
 #include <hx/CFFI.h>
 #include <hx/CFFIPrime.h>
-#include "Utils.h"
-
-
-using namespace utils;
 
 // Helpers
 inline bool val_is_raw_object(value inVal) { return val_type(inVal)==valtObject; }
@@ -161,14 +163,25 @@ static value notification_delete () {
 }
 DEFINE_PRIME0 (notification_delete);
 
-#else
+#elif defined (HX_MACOS)
 static value notification_send (value title, value desc, value taskIconPath) {
-	return val_int(0);
+	return alloc_int(deliver(val_string(title), val_string(desc), val_string(taskIconPath)));
 }
 DEFINE_PRIME3 (notification_send);
 
 static value notification_delete () {
-	return val_int(0);
+	return alloc_int(0);
+}
+DEFINE_PRIME0 (notification_delete);
+
+#else
+static value notification_send (value title, value desc, value taskIconPath) {
+	return alloc_int(0);
+}
+DEFINE_PRIME3 (notification_send);
+
+static value notification_delete () {
+	return alloc_int(0);
 }
 DEFINE_PRIME0 (notification_delete);
 

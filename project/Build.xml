@@ -9,6 +9,8 @@
 
 		<file name="common/ExternalInterface.cpp"/>
 		<file name="common/Utils.cpp"/>
+
+		<file name="common/macUtils.mm" if="mac"/>
 	</files>
 
 	<set name="SLIBEXT" value=".lib" if="windows"/>
