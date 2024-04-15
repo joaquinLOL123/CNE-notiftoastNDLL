@@ -2,7 +2,7 @@
 Source code for the Notification NDLLs
 
 ## Note:
-* [click here!](https://github.com/joaquinLOL123/CNE-Notification-Script-and-NDLL/tree/main) for the script + pre-Built NDLLs.
+* [click here!](https://github.com/joaquinLOL123/CNE-Notification-Script-and-NDLLs) for the script + pre-Built NDLLs.
 * i used the [Codename engine ndll example](https://github.com/FNF-CNE-Devs/ndll-example) as a base, compilation instructions can be read there.
 * Some code here are from [VS. Dave and Bambi's PlatformUtils.hx code](https://github.com/BemboLikePizza/VsDave/blob/main/source/PlatformUtil.hx), and [Terminal Notifier](https://github.com/julienXX/terminal-notifier).
 
