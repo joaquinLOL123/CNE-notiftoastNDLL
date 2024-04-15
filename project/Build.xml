@@ -7,10 +7,10 @@
 	<files id="common">
 		<compilerflag value="-Iinclude"/>
 
-		<file name="common/ExternalInterface.cpp"/>
-		<file name="common/Utils.cpp"/>
+		<file name="common/ExternalInterface.cpp" unless="mac"/>
+		<file name="common/ExternalInterfaceMac.mm" if="mac"/>
 
-		<file name="common/macUtils.mm" if="mac"/>
+		<file name="common/MacUtils.mm" if="mac"/>
 	</files>
 
 	<set name="SLIBEXT" value=".lib" if="windows"/>
@@ -30,6 +30,24 @@
 		<outdir name="../ndll/${BINDIR}"/>
 		<ext value=".ndll" if="windows || mac || linux"/>
 		<files id="common"/>
+
+		<section if='mac'>
+			<vflag name="-l" value="iconv" />
+			<vflag name="-framework" value="IOKit" />
+			<!-- <vflag name="-framework" value="Foundation" /> -->
+			<vflag name="-framework" value="CoreAudio" />
+			<vflag name="-framework" value="CoreVideo" />
+			<vflag name="-framework" value="Cocoa" />
+			<!-- <vflag name="-framework" value="OpenGL" /> -->
+			<vflag name="-framework" value="AudioToolbox" />
+			<vflag name="-framework" value="AudioUnit" />
+			<vflag name="-framework" value="ForceFeedback" />
+			<vflag name="-framework" value="Carbon" />
+			<vflag name="-framework" value="AppKit" />
+			<!-- <vflag name="-framework" value="OpenAL" /> -->
+			<!-- <vflag name="-framework" value="SystemConfiguration" /> -->
+			<vflag name="-framework" value="CoreFoundation" />
+		</section>
 	</target>
 
 	<target id="default">

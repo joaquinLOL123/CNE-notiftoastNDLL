@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<ndll name="ndllexample" unless="android" />
+	<ndll name="notification" unless="android" />
 	
 	<!-- Use the following for an Android Java extension, not needed otherwise -->
 	
-	<dependency name="ndllexample" path="dependencies/android" if="android" />
-	<android extension="org.haxe.extension.NdllExample" />
+	<dependency name="notification" path="dependencies/android" if="android" />
+	<android extension="org.haxe.extension.Notification" />
 	
 </project>

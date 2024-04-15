@@ -1,37 +1,51 @@
+#import "MacUtils.h"
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
-#import "macUtils.h"
+#import <Cocoa/Cocoa.h>
+#import <AppKit/NSWindow.h>
 
-@implementation macUtils
+@implementation MacUtils
 
-namespace macUtils {
-	/*
-	int testNSLog(value str) {
-                
-        //I know, the example is super silly, but easy enough to
-        //demonstrate the idea
-        NSString *msg = [[NSString alloc] initWithCString:"Testing..."];  
-		NSLog(msg);
-
-		return 0;
-	} 
-	*/
-	//https://gist.github.com/preslavrachev/3673663
-
-	int deliver:(NSString title, NSString desc, NSString iconPath) {
-		NSUserNotification *userNotification = [NSUserNotification new];
-  		userNotification.title = title;
-  		userNotification.informativeText = desc;
-
-		if (iconPath != nil) {
-        	NSImage *icon = [[NSImage alloc] initWithContentsOfFile:iconPath];
-        	userNotification.contentImage = icon;
-    	}
-
-		NSUserNotificationCenter *center = [NSUserNotificationCenter defaultUserNotificationCenter];
-  		center.delegate = self;
-  		[center scheduleNotification:userNotification];
-
-		return 0;
-	} 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        // Initialization code, if any
+    }
+    return self;
 }
+
+- (void)deliverWithTitle:(const char*)_title description:(const char*)_desc iconPath:(const char*)_iconPath {
+	NSString *title = [NSString stringWithCString:_title encoding:NSUTF8StringEncoding];
+	NSString *desc = [NSString stringWithCString:_desc encoding:NSUTF8StringEncoding];
+	NSString *iconPath = [NSString stringWithCString:_iconPath encoding:NSUTF8StringEncoding];
+
+	NSUserNotification *userNotification = [NSUserNotification new];
+	userNotification.title = title;
+	userNotification.informativeText = desc;
+
+	if (iconPath != nil) {
+		NSImage *icon = [[NSImage alloc] initWithContentsOfFile:iconPath];
+		userNotification.contentImage = icon;
+	}
+
+	userNotification.soundName = NSUserNotificationDefaultSoundName;
+
+	NSUserNotificationCenter *center = [NSUserNotificationCenter defaultUserNotificationCenter];
+	center.delegate = self;
+	[center deliverNotification:userNotification];
+	//[center scheduleNotification:userNotification];
+
+	//NSLog(@"notification: %@, notification center:%@", userNotification, center);
+
+	/*func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Forground notifications.
+        completionHandler([.alert, .sound])
+    }*/
+}
+
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification
+{
+    return YES;
+}
+@end
